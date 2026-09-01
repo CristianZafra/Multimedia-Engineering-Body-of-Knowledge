@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Benchmark Curricular Ingeniería Multimedia · MM-BOK</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root{--navy:#102a43;--blue:#1769aa;--blue2:#0f4c75;--bg:#f4f6f8;--card:#fff;--line:#d9e2ec;--text:#243b53;--muted:#627d98;--accent:#f0a202;--good:#2f855a;--warn:#b7791f}*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}header{background:linear-gradient(120deg,var(--navy),#173f5f);color:#fff;padding:22px 28px}header h1{margin:0 0 6px;font-size:25px;font-weight:700}header p{margin:0;color:#d9eaf7;font-size:13px}.app{display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px;padding:16px;max-width:1900px;margin:auto}.filters{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;align-self:start;position:sticky;top:10px}.filters h2{font-size:14px;margin:0 0 12px;color:var(--navy)}.filter{margin-bottom:12px}.filter label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}.filter select,.filter input{width:100%;padding:9px 10px;border:1px solid #bcccdc;border-radius:6px;background:#fff;color:var(--text);font-size:13px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:7px}.toggle{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text);margin:7px 0 13px}.toggle input{width:auto}.actions{display:grid;gap:7px}.btn{border:0;border-radius:6px;padding:9px 10px;font-weight:650;cursor:pointer;font-size:12px}.btn.primary{background:var(--blue);color:#fff}.btn.secondary{background:#eaf2f8;color:var(--blue2)}.method{font-size:11px;line-height:1.45;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}main{min-width:0}.kpis{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:10px;margin-bottom:12px}.kpi{background:#fff;border:1px solid var(--line);border-radius:9px;padding:13px 14px;border-top:3px solid var(--blue)}.kpi .label{font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:750;letter-spacing:.05em}.kpi .value{font-size:22px;font-weight:760;color:var(--navy);margin-top:5px}.kpi .sub{font-size:10px;color:var(--muted);margin-top:3px}.notice{background:#fff8e8;border:1px solid #f1d89a;border-radius:8px;padding:9px 12px;font-size:11px;color:#7c5c16;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:#fff;border:1px solid var(--line);border-radius:10px;min-width:0;overflow:hidden}.card.full{grid-column:1/-1}.cardhead{padding:13px 15px 8px;border-bottom:1px solid #edf2f7}.cardhead h3{margin:0;font-size:14px;color:var(--navy)}.cardhead p{margin:4px 0 0;font-size:10.5px;color:var(--muted)}.chart{height:470px;width:100%}.chart.tall{height:610px}.chart.short{height:420px}details{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:9px}summary{cursor:pointer;padding:12px 14px;font-weight:700;color:var(--navy);font-size:13px}.tablewrap{overflow:auto;max-height:430px;border-top:1px solid var(--line)}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:7px 9px;border-bottom:1px solid #edf2f7;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:#f8fafc;color:var(--navy);z-index:1}.badge{display:inline-block;padding:2px 6px;border-radius:99px;background:#eaf2f8;color:var(--blue2);font-size:10px}.foot{padding:16px 0 4px;font-size:10.5px;color:var(--muted);line-height:1.5}.activefilters{font-size:10.5px;color:var(--muted);margin:-3px 0 10px;padding:0 2px}.activefilters strong{color:var(--navy)}@media(max-width:1100px){.app{grid-template-columns:1fr}.filters{position:static}.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}@media(max-width:650px){header{padding:18px}header h1{font-size:20px}.app{padding:10px}.kpis{grid-template-columns:repeat(2,1fr)}.chart{height:420px}.chart.tall{height:560px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Benchmark Curricular de Ingeniería Multimedia · MM-BOK</h1>
+  <p>Contraste de planes de estudio colombianos con la taxonomía preliminar de 20 Knowledge Areas del Multimedia Engineering Body of Knowledge.</p>
+</header>
+<div class="app">
+<aside class="filters">
+  <h2>Filtros de análisis</h2>
+  <div class="filter"><label>Institución</label><select id="fInstitution"><option value="ALL">Todas</option></select></div>
+  <div class="filter"><label>Programa / SNIES</label><select id="fProgram"><option value="ALL">Todos</option></select></div>
+  <div class="filter"><label>Modalidad</label><select id="fMode"><option value="ALL">Todas</option><option>Presencial</option><option>Virtual</option><option>Híbrida</option></select></div>
+  <div class="filter"><label>Calidad de fuente</label><select id="fQuality"><option value="ALL">Todas</option><option value="Oficial">Sólo oficial</option><option value="Referencia">Referencia institucional</option><option value="Secundaria">Fuente secundaria</option></select></div>
+  <div class="filter"><label>Área MM-BOK</label><select id="fArea"><option value="ALL">Todas las áreas</option></select></div>
+  <div class="filter"><label>Semestres / períodos</label><div class="row2"><select id="fSemMin"></select><select id="fSemMax"></select></div></div>
+  <div class="filter"><label>Métrica</label><select id="fMetric"><option value="credits">Créditos</option><option value="courses">Asignaturas</option></select></div>
+  <label class="toggle"><input id="fComplement" type="checkbox"> Incluir formación complementaria / no MM-BOK</label>
+  <div class="actions"><button id="resetBtn" class="btn primary">Restablecer filtros</button><button id="csvBtn" class="btn secondary">Descargar detalle filtrado (CSV)</button></div>
+  <div class="method"><b>Clasificación preliminar.</b> Cada asignatura se asigna a una KA principal mediante reglas léxicas sobre su nombre para evitar doble conteo en la composición al 100 %. El MM-BOK admite que una asignatura cubra varias KA; por tanto, esta capa sirve para exploración y debe validarse académicamente antes de consolidar resultados.</div>
+</aside>
+<main>
+  <div class="kpis">
+    <div class="kpi"><div class="label">Programas con datos</div><div id="kPrograms" class="value">–</div><div class="sub">SNIES en el filtro</div></div>
+    <div class="kpi"><div class="label">Créditos MM-BOK</div><div id="kCredits" class="value">–</div><div class="sub">suma filtrada</div></div>
+    <div class="kpi"><div class="label">Asignaturas</div><div id="kCourses" class="value">–</div><div class="sub">registros filtrados</div></div>
+    <div class="kpi"><div class="label">KA cubiertas</div><div id="kCoverage" class="value">–</div><div class="sub">de 20 áreas</div></div>
+    <div class="kpi"><div class="label">Área dominante</div><div id="kDominant" class="value" style="font-size:16px">–</div><div id="kDominantSub" class="sub">–</div></div>
+  </div>
+  <div class="notice">El SNIES 52460 se conserva como registro histórico, pero no participa en los gráficos cuantitativos porque no se localizó una malla detallada específica. Los registros con planes de referencia o fuentes secundarias permanecen identificados mediante el filtro de calidad.</div>
+  <div id="activeFilters" class="activefilters"></div>
+  <div class="grid">
+    <section class="card full"><div class="cardhead"><h3>1. Heatmap Programa × Área MM-BOK</h3><p>Participación porcentual de la métrica seleccionada dentro de cada programa. Al hacer clic en una celda se aplican filtros de programa y área.</p></div><div id="heatmapProgramArea" class="chart tall"></div></section>
+    <section class="card full"><div class="cardhead"><h3>2. Composición curricular al 100 %</h3><p>Distribución relativa por área MM-BOK. El clic sobre una barra filtra el programa.</p></div><div id="stacked100" class="chart tall"></div></section>
+    <section class="card full"><div class="cardhead"><h3>3. Sankey Programa → Área → Núcleo conceptual</h3><p>Flujos ponderados por créditos o número de asignaturas. Para una lectura más clara se recomienda filtrar por institución o programa.</p></div><div id="sankey" class="chart tall"></div></section>
+    <section class="card"><div class="cardhead"><h3>4. Heatmap Área × Semestre</h3><p>Distribución temporal de la formación por KA.</p></div><div id="heatmapSemester" class="chart"></div></section>
+    <section class="card"><div class="cardhead"><h3>5. Matriz de similitud curricular</h3><p>Similitud coseno entre vectores de participación por área.</p></div><div id="similarity" class="chart"></div></section>
+    <section class="card full"><div class="cardhead"><h3>6. Clustering / dendrograma de programas</h3><p>Agrupamiento jerárquico de enlace promedio usando distancia coseno sobre la estructura curricular.</p></div><div id="dendrogram" class="chart tall"></div></section>
+  </div>
+  <details><summary>Detalle de asignaturas clasificadas</summary><div class="tablewrap"><table><thead><tr><th>Programa</th><th>SNIES</th><th>Periodo</th><th>Asignatura</th><th>Créditos</th><th>KA</th><th>Área</th><th>Núcleo</th><th>Fuente</th></tr></thead><tbody id="detailBody"></tbody></table></div></details>
+  <div class="foot">Metodología: clasificación primaria de asignaturas por reglas de palabras clave; ponderación por créditos o conteo de asignaturas; similitud coseno; agrupamiento jerárquico de enlace promedio. La taxonomía utilizada corresponde a la propuesta de 20 Knowledge Areas del MM-BOK v0.1/v0.2 y debe interpretarse como instrumento de contraste curricular, no como equivalencia automática entre asignatura y Knowledge Area.</div>
+</main>
+</div>
+<script>
+const AREAS=[
+['MM-BOK01','Fundamentos matemáticos y computacionales','Fundamentos'],['MM-BOK02','Ingeniería y desarrollo de software','Software'],['MM-BOK03','Computación gráfica y visual','Gráficos'],['MM-BOK04','Procesamiento de medios digitales','Medios digitales'],['MM-BOK05','Interacción Humano–Computador y UX','HCI / UX'],['MM-BOK06','Sistemas y comunicaciones multimedia','Sistemas / redes'],['MM-BOK07','Experiencias interactivas','Interactividad'],['MM-BOK08','Inteligencia artificial multimodal','IA multimodal'],['MM-BOK09','Tecnologías físicas e interacción','Tecnología física'],['MM-BOK10','Diseño y producción multimedia','Producción'],['MM-BOK11','Datos y contenidos multimedia','Datos'],['MM-BOK12','Ingeniería de experiencias inteligentes','Experiencias IA'],['MM-BOK13','Gemelos digitales y sistemas ciberfísicos','Gemelos digitales'],['MM-BOK14','Gestión de proyectos y productos digitales','Gestión'],['MM-BOK15','Ética, sostenibilidad y ejercicio profesional','Ética / profesión'],['MM-BOK16','Diseño gráfico y comunicación visual','Diseño visual'],['MM-BOK17','Diseño y desarrollo de videojuegos','Videojuegos'],['MM-BOK18','Modelado, animación y producción 2D/3D','2D / 3D'],['MM-BOK19','Realidad extendida: AR, MR y VR','XR'],['MM-BOK20','Modelado y simulación','Simulación'],['X-COMP','Formación complementaria / fuera de taxonomía','Complementaria']
+].map((x,i)=>({code:x[0],name:x[1],short:x[2],idx:i}));
+const PALETTE=['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf','#3366cc','#dc3912','#109618','#990099','#0099c6','#dd4477','#66aa00','#b82e2e','#316395','#994499','#94a3b8'];
+const A=Object.fromEntries(AREAS.map(a=>[a.code,a]));
+function pc(s){return s.trim().split('\n').filter(Boolean).map(line=>{const p=line.split('|');return{sem:+p[0],cr:+p[1],name:p.slice(2).join('|')}})}
+const C10993=pc(`1|4|Matemáticas Básicas
+1|3|Programación I
+1|2|Introducción a la Ingeniería
+1|2|Expresión Gráfica
+1|2|Metodología de la Investigación
+1|1|Cátedra Neogranadina
+1|2|Ética
+2|4|Cálculo Diferencial
+2|4|Física Mecánica
+2|4|Química
+2|3|Programación II
+2|0|Extensión Cultural y Deportiva
+3|4|Cálculo Integral
+3|4|Física Electricidad y Magnetismo
+3|3|Álgebra Lineal
+3|3|Programación III
+3|2|Historia del Arte
+4|3|Cálculo Vectorial
+4|4|Física Óptica y Acústica
+4|3|Dibujo
+4|2|Taller Digital de Diseño
+4|3|Introducción a la Computación Gráfica
+5|3|Ecuaciones Diferenciales
+5|3|Probabilidad y Estadística
+5|3|Animación 2D
+5|3|Computación Gráfica
+5|2|Guiones
+5|2|Principios Constitucionales
+6|3|Métodos Numéricos
+6|3|Modelado 3D
+6|3|Diseño I
+6|3|Procesamiento de Señales
+6|3|Ingeniería de Software
+7|3|Animación 3D y Dinámicas
+7|3|Simulación
+7|3|Diseño II
+7|3|Procesamiento de Imágenes
+7|3|Tecnologías de Internet
+8|2|Seminario de Investigación
+8|3|Render
+8|3|Inteligencia Artificial
+8|3|Diseño III
+8|3|Electiva
+8|3|Audio y Video
+9|3|Aplicaciones 3D
+9|3|Electiva de Énfasis I
+9|3|Electiva de Énfasis II
+9|3|Integración Multimedia
+9|3|Economía y Finanzas
+10|3|Electiva de Énfasis III
+10|3|Electiva de Énfasis IV
+10|3|Electiva de Énfasis V
+10|3|Electiva de Énfasis VI
+10|2|Gestión Empresarial
+10|3|Gestión Integral de Proyectos`);
+const C53414=pc(`1|3|Precálculo
+1|4|Matemáticas Discretas
+1|3|Fundamentos de Programación
+1|3|Introducción a la Ingeniería
+1|1|Comunicación Oral y Escrita
+1|2|Humanística I
+1|2|Humanística II
+1|2|Inglés I
+2|4|Física Mecánica
+2|4|Cálculo I
+2|3|Programación Orientada a Objetos
+2|2|Taller Multimedia
+2|2|Humanística III
+2|1|Bienestar Institucional I
+2|2|Inglés II
+3|3|Cálculo II
+3|3|Álgebra Lineal
+3|3|Diseño de Medios Digitales
+3|2|Guión para Medios Digitales
+3|2|Humanística IV
+3|2|Humanística V
+3|1|Bienestar Institucional II
+3|2|Inglés III
+4|3|Matemáticas Especiales
+4|3|Probabilidad y Estadística
+4|3|Computación Gráfica
+4|2|Dibujo para Multimedia
+4|2|Taller de Video y Fotografía
+4|1|Comunicación Oral y Escrita II
+4|2|Humanística VI
+4|1|Bienestar Institucional III
+4|2|Inglés IV
+5|4|Base de Datos
+5|2|Taller de Animación 2D
+5|3|Fundamentos de Redes
+5|3|Audio Digital
+5|2|Electiva en Ingeniería I
+5|2|Humanística VII
+5|1|Bienestar Institucional IV
+5|2|Inglés V
+6|3|Desarrollo Web
+6|3|Modelado 3D
+6|3|Circuitos Digitales
+6|3|Procesamiento Digital de Señales
+6|2|Electiva en Ingeniería II
+6|3|Gestión en Proyectos
+6|2|Inglés VI
+7|3|Animación e Integración 3D
+7|3|Electrónica para Multimedia
+7|3|Procesamiento de Imágenes
+7|2|Edición y Post-producción de Video
+7|4|Proyecto en Ingeniería
+7|2|Inglés VII
+8|3|Diseño de Experiencias Interactivas
+8|2|Electiva en Ingeniería III
+8|2|Legislación para Contenidos Digitales
+8|6|Práctica Profesional
+8|2|Inglés VII`);
+const C101942=pc(`1|3|Cálculo Diferencial
+1|2|Geometría Vectorial
+1|3|Fundamentos de Programación
+1|2|Introducción a la Ingeniería
+1|3|Matemáticas Discretas
+1|3|Guion y Redacción de Medios Digitales
+2|3|Cálculo Integral
+2|3|Álgebra Lineal
+2|3|Probabilidad y Estadística
+2|2|Diseño para Medios Digitales
+2|3|Lenguaje Audiovisual
+2|2|Formación Humana I
+3|3|Cálculo Multivariado
+3|4|Física Mecánica y Laboratorio
+3|3|Lenguajes de Programación
+3|1|Interacción Humano Computador
+3|3|Video y Fotografía
+3|2|Formación Humana II
+4|3|Ecuaciones Diferenciales
+4|3|Programación Avanzada
+4|2|Taller de Computación Gráfica
+4|3|Modelado 3D
+4|3|Taller de Animación
+4|2|Formación Humana III
+5|3|Métodos Numéricos
+5|3|Ingeniería Económica
+5|2|Taller de Diseño Digital
+5|3|Audio Digital
+5|3|Base de Datos Multimedia
+5|2|Seminario de Investigación
+6|3|Modelamiento y Simulación
+6|3|Ingeniería de Proyectos
+6|4|Redes Multimedia
+6|4|Anteproyecto de Grado
+6|2|Bioética
+7|3|Taller de Guion y Narrativa Audiovisual
+7|3|Secuenciadores
+7|3|Desarrollo Móvil - Web Full Stack
+7|5|Proyecto de Grado
+7|2|Ética Profesional
+8|3|Diseño Sonoro
+8|3|Expresión Visual y Artística
+8|3|Taller de Interactividad
+8|7|Práctica Profesionalizante
+9|3|Arquitectura de Videojuegos y XR
+9|3|Optativa I
+9|3|Optativa II
+9|3|Optativa III
+9|3|Electiva
+9|1|Seminario de Investigación y Emprendimiento`);
+const C103343=pc(`1|3|Cálculo Diferencial
+1|3|Álgebra Lineal
+1|3|Algoritmos y Programación
+1|3|Fundamentos de Dibujo Artístico
+1|2|Introducción a la Ingeniería
+1|1|Taller de Cálculo Diferencial
+1|2|Humanística I
+2|3|Cálculo Integral
+2|3|Física Mecánica
+2|3|Diseño y Programación Orientada a Objetos
+2|2|Pensamiento Sistémico
+2|1|Taller Física Mecánica
+2|3|Fundamentos de Diseño Gráfico
+2|2|Humanística II
+3|3|Cálculo Multivariado
+3|3|Oscilaciones y Ondas
+3|3|Estructura de Datos
+3|3|Estructuración de Contenido
+3|3|Interacción Hombre-Máquina
+3|2|Fundamentos de Investigación
+4|3|Ecuaciones Diferenciales
+4|2|Circuitos Digitales
+4|3|Imagen y Video por Computador
+4|3|Sistemas de Audio
+4|3|Procesamiento de Imágenes
+4|3|Probabilidad y Estadística
+5|3|Métodos Numéricos
+5|2|Métodos de Investigación
+5|3|Bases de Datos Multimedia
+5|3|Modelado 3D y Texturizado
+5|3|Computación Gráfica
+5|2|Humanística III
+6|2|Análisis Experimental
+6|4|Diseño y Desarrollo Web
+6|3|Rigging y Animación 3D
+6|3|Multimedia para Móviles
+6|2|Electiva Institucional
+6|2|Humanística IV
+7|2|Formulación Proyectos de Investigación
+7|3|Simulación por Computador
+7|3|Proyectos Multimedia
+7|3|Desarrollo de Videojuegos 2D
+7|3|Diseño de Proyectos Multimedia
+7|2|Humanística V
+8|1|Seminario de Investigación
+8|4|Desarrollo de Videojuegos 3D
+8|3|Post Producción Digital
+8|3|Redes y Servicios Multimedia
+8|2|Electiva de Programa
+8|2|Innovación y Emprendimiento
+8|2|Humanística VI
+9|1|Seminario de Investigación
+9|3|Diseño y Experiencia de Usuario 3D
+9|3|Realidad Mixta y Virtual
+9|3|Servicios Multimedia Basados en Internet
+9|2|Electiva de Programa
+9|3|Inteligencia Artificial
+9|2|Humanística VII
+10|2|Proyecto de Grado
+10|6|Práctica Profesional
+10|2|Innovación y Emprendimiento
+10|2|Electiva de Programa
+10|2|Electiva Institucional`);
+const C104717=pc(`1|4|Precálculo
+1|2|Humanístico I
+1|2|Metodología del Estudio
+1|2|Introducción a la Ingeniería
+1|3|Fundamentos de Programación
+1|3|Diseño Digital
+2|3|Cálculo Diferencial
+2|3|Física Mecánica
+2|2|Expresión Oral y Escrita
+2|3|Taller de Animación en 2D
+2|3|Programación Orientada a Objetos
+2|2|Humanístico II
+3|3|Cálculo Integral
+3|3|Física Eléctrica
+3|2|Humanístico III
+3|3|Estructura de Datos Orientada a Objetos
+3|3|Álgebra Lineal
+3|3|Guion y Redacción de Medios Digitales
+4|3|Ecuaciones Diferenciales
+4|2|Humanístico IV
+4|3|Principios de Electrónica
+4|3|Diseño de Sistemas Multimedia
+4|3|Profesional Complementaria I
+4|3|Electiva I
+5|2|Humanístico V
+5|3|Métodos Numéricos
+5|3|Lógica Digital
+5|3|Arquitectura de Computadores
+5|3|Ingeniería de Software
+5|3|Profesional Complementaria II
+6|2|Metodología de la Investigación
+6|3|Proyecto Integrador Web Multimedia
+6|3|Redes Multimedia
+6|3|Bases de Datos Multimedia
+6|3|Electiva II
+6|3|Estadística
+7|3|Edición de Audio y Video
+7|2|Humanístico VI
+7|3|Procesamiento de Señales Digitales
+7|3|Emprendimiento
+7|3|Modelado y Animación en 3D
+7|3|Dibujo para Ingenieros
+8|3|Computación Gráfica
+8|3|Integración y Composición Multimedia en Desarrollo de Videojuegos 3D
+8|3|Video Digital y Procesamiento de Imágenes
+8|3|Electiva III
+8|1|Seminario Trabajo de Grado I
+8|3|Profesional Complementaria III
+9|3|Profesional Complementaria VI (Virtual)
+9|3|Profesional Complementaria V (Virtual)
+9|1|Seminario Trabajo de Grado II
+9|7|Prácticas Industriales
+9|2|Humanístico VII`);
+const C108452=pc(`1|1|Deporte Formativo
+1|2|Dibujo Artístico
+1|2|Expresión Oral y Escrita
+1|1|Formación Integral I
+1|2|Introducción al Programa
+1|2|Lógica
+1|3|Lógica de la Programación
+1|2|Matemática Básica
+2|3|Álgebra Lineal
+2|3|Cálculo Diferencial
+2|2|Estadística
+2|2|Expresión Gráfica
+2|1|Formación Integral II
+2|3|Narrativa Visual
+2|3|Programación Básica
+3|2|Bases de Datos Multimedia
+3|3|Cálculo Integral
+3|2|Inglés I
+3|3|Mecánica
+3|3|Programación Avanzada
+3|3|Taller Diseño Gráfico Digital
+4|3|Diseño de Personajes para Animación Digital
+4|3|Ecuaciones Diferenciales
+4|3|Electromagnetismo
+4|3|Ingeniería del Software
+4|2|Inglés II
+4|2|Metodología y Práctica de la Investigación
+5|3|Ilustración y Animación 2D
+5|2|Inglés III
+5|2|Redes y Servicios Multimedia
+5|1|Seminario de Investigación
+5|3|Taller Diseño Multimedia
+5|2|Usabilidad y Accesibilidad
+5|3|Video y Fotografía Digital
+6|2|Cultura y Comunicación Visual
+6|3|Edición Audio y Video
+6|3|Emprendimiento e Innovación TI
+6|2|Humanidades
+6|3|Modelado y Animación 3D
+6|3|Taller Aplicaciones Móviles
+7|2|Arquitectura de Videojuegos
+7|2|Electiva de Profundización I
+7|1|Electiva Libre
+7|2|Ética General
+7|3|Producción Multimedia
+7|3|Profundización de Proyectos de TI
+7|3|Realidad Mixta (RV/RA)
+8|2|Electiva de Profundización II
+8|2|Ética Profesional
+8|3|Gerencia de Proyectos de Tecnología
+8|3|Integración Multimedia
+8|3|Marketing Digital
+8|3|Producción de Video Juegos
+9|4|Alternativa de Grado
+9|1|Constitución y Formación Ciudadana
+9|2|Electiva Complementaria Interdisciplinaria
+9|8|Práctica Profesional`);
+const CUAO=pc(`1|4|Matemáticas Fundamentales
+1|3|Introducción a la Ingeniería
+1|1|Fundamentos de Ingeniería Multimedia
+1|2|Desarrollo Personal
+1|4|Comunicación Oral y Escrita
+1|3|Inglés 1
+2|3|Cálculo 1
+2|3|Diseño Conceptual
+2|3|Algoritmia y Programación
+2|3|Álgebra Lineal
+2|3|Identidad y Pluralidad
+2|3|Inglés 2
+3|4|Cálculo 2
+3|4|Física 1
+3|3|Programación Orientada a Objetos
+3|4|Seminario Taller Multimedia
+3|3|Inglés 3
+4|3|Probabilidad y Estadística
+4|4|Física 2
+4|4|Computación Gráfica
+4|4|Taller de Audio y Video Digital
+4|3|Inglés 4
+5|2|Actividad Complementaria
+5|3|Base de Datos Multimedia
+5|4|Modelado y Animación por Computador
+5|3|Arquitectura de Sistemas Multimedia
+5|3|F.C. 1: Sociedad y Estado
+5|3|Inglés 5
+6|4|Procesamiento de Señales y Audio
+6|4|Fundamentos de Realidad Virtual
+6|4|Interacción Humano-Computador
+6|3|Desarrollo de Experiencias Multimedia Web
+6|3|F.C. 3: Paz y Convivencia
+7|3|Procesamiento Digital de Imágenes
+7|3|Videojuegos
+7|3|Diseño Multimedia 1
+7|3|Ambiente y Desarrollo Sostenibles
+7|3|Computación Física
+7|3|Electiva Socio Humanística
+8|3|Administración para Ingenieros
+8|2|Seminario de Ingeniería Multimedia
+8|3|Diseño Multimedia 2
+8|3|Gestión de Sistemas y Tecnologías Multimedia
+8|4|Redes y Servicios Multimedia
+8|3|Formulación y Evaluación de Proyectos
+9|3|Sistemas Multimedia Audiovisuales
+9|3|Electiva Profesional 1
+9|3|Electiva Profesional 2
+9|3|Electiva Profesional 3
+9|3|Trabajo de Grado
+9|2|Electiva de Lectura y Escritura`);
+const C107601=pc(`1|3|Álgebra, Trigonometría y Geometría Analítica
+1|3|Competencias Comunicativas
+1|3|Pensamiento Lógico Matemático
+1|2|Introducción a la Ingeniería
+1|3|Herramientas Digitales para la Gestión del Conocimiento
+1|3|Cátedra Unadista
+2|3|Cálculo Diferencial
+2|3|Electivo Interdisciplinar Básico Común
+2|3|Álgebra Lineal
+2|3|Fundamentos de Informática y Redes
+2|3|Fundamentos de Arte y Diseño
+2|3|Inglés A1
+3|3|Física General
+3|3|Fundamentos y Generalidades de Investigación
+3|3|Fundamentos de Programación
+3|3|Guion y Diseño Multimedia
+3|3|Diseño Gráfico Digital
+3|3|Inglés A2
+4|3|Cálculo Integral
+4|2|Proyecto de Ingeniería I
+4|3|Programación
+4|3|Requerimientos y Modelado Multimedia
+4|3|Producción Audiovisual
+4|3|Inglés B1
+5|3|Cálculo Multivariado
+5|3|Ingeniería Económica
+5|3|Programación Web
+5|3|Bases de Datos Multimedia
+5|3|Diseño y Animación 2D
+5|3|English Composition II
+6|3|Matemáticas Discretas
+6|3|Formulación y Evaluación de Proyectos de Ingeniería
+6|3|Electivo Disciplinar Específico I
+6|3|Diseño Sonoro Multimedia
+6|3|Modelado por Computadora
+6|3|Multimedia Project Management
+7|3|Fundamentos en Gestión Integral
+7|2|Proyecto de Ingeniería II
+7|3|Electivo Disciplinar Específico II
+7|3|Programación para Videojuegos
+7|3|Diseño y Animación 3D
+7|3|Diseño Interactivo
+8|2|Electivo de Formación Complementaria
+8|2|Seminario de Investigación
+8|3|Electivo Disciplinar Específico III
+8|3|Electivo Interdisciplinar Básico Común
+8|3|Aplicaciones Multimedia
+8|3|Ética y Ciudadanía
+9|2|Electivo de Formación Complementaria
+9|3|Trabajo de Grado
+9|3|Electivo Disciplinar Específico IV
+9|2|Validación y Verificación Multimedia
+9|3|Seguridad Informática`);
+const C110840=pc(`1|3|Diseño Básico
+1|2|Introducción a la Ingeniería Multimedia
+1|3|Algoritmos y Programación
+1|3|Matemática Fundamental
+1|2|Lectura e Interpretación de Textos
+1|3|Realidad Organizacional
+1|2|Electiva Institucional I
+2|2|Taller de Fotografía
+2|3|Realización Audiovisual
+2|4|Programación Orientada a Objetos
+2|3|Álgebra Lineal
+2|3|Cálculo Diferencial
+2|2|Introduction to English
+3|3|Diseño Digital I
+3|4|Construcción de Bases de Datos
+3|3|Cálculo Integral
+3|3|Pre-Elementary
+3|2|Competencias Blandas
+3|2|Electiva Institucional II
+4|2|Animación Digital 2D
+4|2|Diseño UX-UI
+4|3|Cálculo Multivariado
+4|3|Física Mecánica
+4|3|Elementary I
+4|2|Estadística Descriptiva
+4|2|Integridad y Transparencia
+5|3|Modelado 3D
+5|4|Diseño y Desarrollo Web
+5|3|Ecuaciones Diferenciales
+5|2|Física Óptica y Acústica
+5|3|Elementary II
+5|2|Estadística Inferencial
+6|3|Animación 3D
+6|3|Fundamentos de Audio
+6|4|Procesamiento de Señales
+6|3|Pre-Intermediate I
+6|2|Investigación Cuantitativa
+6|2|Electiva de Facultad I
+7|3|Realidad Virtual
+7|3|Edición y Sincronización de Audio
+7|2|Computación Gráfica
+7|3|Pre-Intermediate II
+7|2|Investigación Cualitativa
+7|2|Idea de Negocio
+7|2|Electiva de Facultad II
+8|3|Realidad Aumentada y Mixta
+8|3|Desarrollo de Videojuegos
+8|3|Análisis y Procesamiento de Imágenes
+8|3|Profundización I
+8|3|Proyecto de Investigación
+8|2|Modelo de Negocio
+9|2|Aplicaciones y Servicios Multimedia en Entornos Digitales
+9|3|Producción Multimedia
+9|3|Profundización II
+9|4|Práctica Profesional
+9|3|Opción de Grado
+9|2|Liderazgo Empresarial`);
+const CSIMON=pc(`1|3|Procesos Comunicativos I
+1|2|Cátedra Bolivariana: Ciudadanía y Democracia
+1|2|Desarrollo Personal I
+1|3|Álgebra y Trigonometría
+1|2|Lógica Matemática
+1|3|Expresión Gráfica y Creativa
+1|2|Introducción a la Ingeniería Multimedia
+2|3|Procesos Comunicativos II
+2|2|Desarrollo Personal II
+2|3|Cálculo Diferencial
+2|3|Álgebra Lineal
+2|3|Diseño Gráfico
+2|3|Fundamentos de Ilustración
+3|2|Electiva Desarrollo Personal III
+3|3|Física Mecánica
+3|3|Cálculo Integral
+3|2|Fotografía Digital
+3|4|Algoritmia y Programación I
+3|3|Diseño Gráfico Digital
+4|3|Electiva de Ecuaciones Diferenciales
+4|2|Física Ondas y Calor
+4|4|Algoritmia y Programación II
+4|2|Plataformas de Desarrollo Multimedia
+4|3|Diseño de Personajes para Animación Digital
+4|2|Arquitectura de la Información
+5|2|Electiva Filosofía y Humanidades
+5|3|Física Electricidad y Magnetismo
+5|2|Electiva en Bases de Datos
+5|2|Marketing Digital
+5|3|Animación Digital 2D
+5|2|Tratamiento Digital de Imágenes
+5|3|Electiva Profesional I
+6|2|Formación Investigación I
+6|3|Estadística Descriptiva e Inferencial
+6|3|Modelado de Objetos y Personajes en 3D
+6|3|Electiva Complementaria
+6|3|Producción de Contenido Audiovisual
+6|3|Electiva Profesional II
+7|2|Formación Investigación II
+7|2|Innovación y Emprendimiento I
+7|3|Electiva Profesional III
+7|3|Realidad Virtual
+7|3|Animación de Objetos y Personajes en 3D
+7|3|Electiva de Formulación y Evaluación de Proyectos
+7|2|Diseño de Experiencia e Interfaces de Usuario
+8|2|Innovación y Emprendimiento II
+8|2|Creación de Tecnologías Didácticas Multimediables
+8|3|Desarrollo de Videojuegos
+8|2|Ingeniería Web
+8|3|Desarrollo de Aplicaciones Móviles
+8|2|Diseño Final de Ingeniería Multimedia
+8|3|Electiva Interdisciplinar I
+9|2|Ética Profesional
+9|9|Práctica Profesional
+9|3|Electiva Interdisciplinar II`);
+const C116679=pc(`1|3|Matemáticas Generales
+1|4|Fundamentos de Programación
+1|3|Introducción al Diseño
+1|3|Técnicas de Comunicación
+1|2|Desarrollo Personal - Introducción a la Ingeniería Multimedia
+1|2|English 1
+2|3|Cálculo Diferencial
+2|2|Laboratorio de Multimedia
+2|2|Física Mecánica y Laboratorio
+2|3|Programación Orientada a Objetos
+2|3|Dibujo para Ingeniería
+2|2|Desarrollo Personal - Formación del Ser
+2|2|English 2
+3|3|Cálculo Integral
+3|3|Álgebra Lineal
+3|2|Física Electromagnética y Laboratorio
+3|3|Estructuras de Datos
+3|2|Narrativa Audiovisual
+3|3|Diseño Gráfico Digital
+3|2|English 3
+4|3|Ecuaciones Diferenciales
+4|3|Arquitectura de Sistemas
+4|3|Electrónica Digital
+4|2|Taller de Fotografía
+4|3|Diseño Centrado en el Usuario
+4|2|English 4
+5|3|Estadística Descriptiva
+5|3|Bases de Datos
+5|3|Realidad Virtual
+5|3|Taller de Audio y Video Digital
+5|3|Modelado y Animación 2D
+5|2|Desarrollo Social - Formación Ciudadana
+6|3|Estadística Inferencial
+6|3|Desarrollo Web
+6|3|Redes de Computadores
+6|3|Diseño de Objetos y Personajes
+6|3|Electiva I
+6|3|Modelado y Animación 3D
+7|3|Desarrollo de Aplicaciones Móviles
+7|3|Videojuegos I, Game Design y Concept Art
+7|3|Electiva II
+7|2|Video Interactivo
+7|2|Administración General
+7|3|Marketing Digital
+8|3|Videojuegos II, Gaming Programmer
+8|3|Electiva III
+8|3|Computación Gráfica
+8|3|Evaluación de Proyectos
+8|3|Metodología de la Investigación
+8|2|Desarrollo Social
+9|3|Electiva IV
+9|3|Post Producción Multimedia
+9|3|Procesamiento de Imágenes
+9|3|Gestión de Proyectos
+9|2|Seminario de Grado
+9|2|Desarrollo Personal - Ética
+10|3|Electiva V
+10|2|Gestión de Tecnología
+10|7|Trabajo de Grado`);
+const C116723=pc(`1|3|Pensamiento Matemático
+1|3|Introducción a la Programación
+1|3|Ondas y Electromagnetismo
+1|3|Introducción a la Ingeniería Multimedia
+1|3|Inglés I
+1|3|Competencia Lingüística
+1|1|Competencias Sociales y Ciudadanas
+2|2|Álgebra Lineal
+2|3|Programación Orientada a Objetos
+2|3|Aplicación Sonora
+2|3|Aplicación Audiovisual
+2|3|Electiva I
+2|3|Inglés II
+3|3|Cálculo Diferencial
+3|3|Bases de Datos Multimedia
+3|3|Técnicas de Grabación y Registro Sonoro
+3|3|Fundamentos de Diseño
+3|3|Producción Audiovisual
+3|3|Inglés III
+4|3|Cálculo Multivariado
+4|3|Procesamiento de Señales
+4|3|Postproducción y Masterización de Audio
+4|3|Diseño Digital
+4|3|Electiva II
+4|3|Fundamentos de Investigación
+5|3|Estadística y Análisis de Datos
+5|3|Analítica y Visualización de Datos
+5|3|Programación en Ambientes Móviles
+5|3|Modelado y Diseño 2D y 3D
+5|3|Taller de Animación Cinematográfica
+5|3|Electiva III
+5|3|Inglés IV
+6|3|Estadística Inferencial
+6|3|Inteligencia Artificial
+6|3|Inteligencia de Negocios
+6|3|Modelado y Diseño 2D y 3D
+6|2|Electiva IV
+6|1|Práctica Profesional
+7|3|Matemáticas Financieras
+7|3|Minería de Datos
+7|3|Desarrollo de Videojuegos
+7|3|Laboratorio de VFX
+7|3|Electiva V
+7|3|Anteproyecto
+7|3|Inglés V
+8|3|Machine Learning y Deep Learning
+8|3|Realidad Aumentada, Virtual y Ambientes Virtualizados
+8|3|Producción Crossmedia y Transmedia
+8|3|Electiva VI
+8|3|Opción de Grado Profesional`);
+const C118337=pc(`1|3|Matemáticas
+1|3|Programación Básica
+1|3|Expresión Gráfica
+1|3|Cátedra San Pablo
+1|3|Teorías de la Información y de la Comunicación
+1|3|Inglés I
+2|3|Álgebra Lineal
+2|3|Innovación y Creatividad
+2|3|Programación Avanzada
+2|3|Cátedra Interdisciplinar Historia General Colombia
+2|3|Video y Fotografía
+2|3|Inglés II
+3|3|Cálculo Diferencial
+3|3|Metodologías Ágiles
+3|3|Desarrollo Software
+3|3|Investigación
+3|3|Modelación y Animación 2D
+3|3|Inglés III
+4|3|Cálculo Integral
+4|3|Marketing Estratégico
+4|3|Programación Orientada a Objetos
+4|3|Teoría y Método en Investigación
+4|3|Modelación y Animación 3D
+4|3|Inglés IV
+5|3|Ecuaciones Diferenciales
+5|3|Física
+5|3|Programación Orientada para Objetos Multimedia
+5|3|Narrativas y Storyteller
+5|3|Diseño Web
+5|3|Formulación de Proyectos Multimedia
+6|3|Estadística
+6|3|Programación para Videojuegos
+6|3|Cloud Computing
+6|3|Implementación de Proyectos Multimedia
+6|3|Creación de Contenido
+6|3|Cátedra Interdisciplinar Sociedad y Cultura
+7|3|Ética y Gobernanza de Datos
+7|3|Electiva
+7|3|Óptica y Acústica
+7|3|Desarrollo de Multimedia
+7|3|Liderazgo y Emprendimiento
+7|3|Arte para Videojuegos
+8|3|Desarrollo de Videojuegos
+8|3|Presentación de Proyectos Multimedia
+8|3|Tecnologías Emergentes
+8|3|Electiva
+8|3|Producción y Posproducción Audiovisual
+8|3|Práctica Profesional`);
+const PROGRAMS=[
+{snies:'10993',label:'UMNG · 10993',inst:'Universidad Militar Nueva Granada',mode:'Presencial',quality:'Oficial',source:'Plan institucional',courses:C10993},
+{snies:'52460',label:'UMNG histórico · 52460',inst:'Universidad Militar Nueva Granada',mode:'Presencial',quality:'Incompleto',source:'SNIES histórico',courses:[]},
+{snies:'53414',label:'USB Cali · 53414',inst:'Universidad de San Buenaventura',mode:'Presencial',quality:'Oficial',source:'USB Cali',courses:C53414},
+{snies:'101942',label:'USB Medellín · 101942',inst:'Universidad de San Buenaventura',mode:'Presencial',quality:'Oficial',source:'USB Medellín',courses:C101942},
+{snies:'103343',label:'USB Bogotá · 103343',inst:'Universidad de San Buenaventura',mode:'Presencial',quality:'Oficial',source:'USB Bogotá',courses:C103343},
+{snies:'104717',label:'USB Cartagena · 104717',inst:'Universidad de San Buenaventura',mode:'Presencial',quality:'Oficial',source:'USB Cartagena',courses:C104717},
+{snies:'108452',label:'Universidad de Boyacá · 108452',inst:'Universidad de Boyacá',mode:'Presencial',quality:'Oficial',source:'Universidad de Boyacá',courses:C108452},
+{snies:'20146',label:'UAO Presencial · 20146',inst:'Universidad Autónoma de Occidente',mode:'Presencial',quality:'Oficial',source:'UAO plan institucional',courses:CUAO},
+{snies:'110420',label:'UAO Híbrida · 110420',inst:'Universidad Autónoma de Occidente',mode:'Híbrida',quality:'Referencia',source:'UAO plan institucional de referencia',courses:CUAO},
+{snies:'110417',label:'UAO Virtual · 110417',inst:'Universidad Autónoma de Occidente',mode:'Virtual',quality:'Referencia',source:'UAO plan de referencia no verificado',courses:CUAO},
+{snies:'107601',label:'UNAD · 107601',inst:'Universidad Nacional Abierta y a Distancia - UNAD',mode:'Virtual',quality:'Oficial',source:'UNAD; discrepancia de versión',courses:C107601},
+{snies:'110840',label:'UCompensar · 110840',inst:'Fundación Universitaria Compensar - UCompensar',mode:'Presencial',quality:'Oficial',source:'UCompensar',courses:C110840},
+{snies:'106549',label:'Unisimón Barranquilla · 106549',inst:'Universidad Simón Bolívar',mode:'Presencial',quality:'Oficial',source:'Unisimón Barranquilla',courses:CSIMON},
+{snies:'106951',label:'Unisimón Cúcuta · 106951',inst:'Universidad Simón Bolívar',mode:'Presencial',quality:'Oficial',source:'Unisimón Cúcuta',courses:CSIMON},
+{snies:'116679',label:'UNIMAYOR · 116679',inst:'Institución Universitaria Colegio Mayor del Cauca - UNIMAYOR',mode:'Presencial',quality:'Oficial',source:'UNIMAYOR',courses:C116679},
+{snies:'116723',label:'UNINPAHU · 116723',inst:'Fundación Universitaria para el Desarrollo Humano - UNINPAHU',mode:'Presencial',quality:'Secundaria',source:'Detalle curricular secundario; ficha institucional 162 cr.',courses:C116723},
+{snies:'118337',label:'UNISANPABLO · 118337',inst:'Fundación Universitaria San Pablo - UNISANPABLO',mode:'Presencial',quality:'Oficial',source:'UNISANPABLO',courses:C118337}
+];
+function norm(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+function has(s,...terms){return terms.some(t=>s.includes(t))}
+function result(code,nucleus){return{code,area:A[code].name,nucleus}}
+function classify(name){const s=norm(name);
+ if(has(s,'videojuego','video juegos','game design','gaming programmer','game programmer'))return result('MM-BOK17',has(s,'program','arquitectura','gaming')?'Programación y arquitectura de videojuegos':'Game design y producción');
+ if(has(s,'realidad virtual','realidad aumentada','realidad mixta','rv/ra','xr','ambientes virtualizados'))return result('MM-BOK19',has(s,'aumentada','mixta','xr')?'AR/MR y XR':'Realidad virtual');
+ if(has(s,'simulacion','modelamiento y simulacion','modelado y simulacion'))return result('MM-BOK20','Modelado y simulación computacional');
+ if(has(s,'modelado','modelacion','animacion','rigging','texturizado','personajes','vfx','aplicaciones 3d'))return result('MM-BOK18',has(s,'animacion','rigging')?'Animación, rigging y personajes':'Modelado y producción 2D/3D');
+ if(has(s,'computacion grafica','render','graficos por computador'))return result('MM-BOK03','Gráficos, rendering y visualización');
+ if(has(s,'inteligencia artificial','machine learning','deep learning'))return result('MM-BOK08',has(s,'machine','deep')?'Aprendizaje automático':'Inteligencia artificial');
+ if(has(s,'agentes inteligentes','digital human','interfaces adaptativas','experiencias inteligentes'))return result('MM-BOK12','Interfaces y experiencias inteligentes');
+ if(has(s,'gemelo digital','digital twin','ciberfisic'))return result('MM-BOK13','Gemelos digitales y sistemas ciberfísicos');
+ if(has(s,'interaccion humano','interaccion hombre','ux','ui','usabilidad','accesibilidad','centrado en el usuario','experiencia de usuario','interfaces de usuario'))return result('MM-BOK05',has(s,'usabilidad','accesibilidad')?'Usabilidad y accesibilidad':'HCI y UX/UI');
+ if(has(s,'procesamiento de imagen','tratamiento digital de imagen','procesamiento digital de imagen','analisis y procesamiento de imagen','imagen y video por computador'))return result('MM-BOK04','Procesamiento de imagen y vídeo');
+ if(has(s,'procesamiento de senal','procesamiento digital de senal','audio digital','sistemas de audio','fundamentos de audio','optica y acustica','ondas y calor'))return result('MM-BOK04',has(s,'audio','acustica')?'Audio y acústica':'Señales digitales');
+ if(has(s,'redes','network','servicios multimedia','cloud computing','seguridad informatica','tecnologias de internet'))return result('MM-BOK06',has(s,'redes','network')?'Redes multimedia':'Servicios, nube y seguridad');
+ if(has(s,'base de datos','bases de datos','analitica','inteligencia de negocios','mineria de datos','analisis de datos'))return result('MM-BOK11',has(s,'analitica','mineria','inteligencia de negocios','analisis de datos')?'Analítica de datos':'Bases de datos y contenidos');
+ if(has(s,'electronica','circuitos digitales','logica digital','arquitectura de computadores','computacion fisica','sistemas embebidos','sensores','iot'))return result('MM-BOK09',has(s,'computacion fisica','sensores','iot')?'Interacción física e IoT':'Electrónica y plataformas físicas');
+ if(has(s,'fotografia','audiovisual','edicion','postproduccion','post-produccion','post produccion','produccion audiovisual','produccion multimedia','creacion de contenido','guion','narrativa audiovisual','lenguaje audiovisual','audio y video','diseno sonoro','secuenciadores','aplicacion sonora','aplicacion audiovisual','tecnicas de grabacion','masterizacion','crossmedia','transmedia','video interactivo'))return result('MM-BOK10',has(s,'guion','narrativa')?'Narrativa y contenidos':'Producción audiovisual y sonora');
+ if(has(s,'diseno grafico','dibujo','expresion grafica','diseno digital','fundamentos de arte','comunicacion visual','expresion visual','ilustracion','diseno conceptual','diseno basico','introduccion al diseno','historia del arte'))return result('MM-BOK16',has(s,'dibujo','ilustracion','arte')?'Arte, dibujo e ilustración':'Diseño gráfico y comunicación visual');
+ if(has(s,'interactividad','interactivo','integracion multimedia','aplicaciones multimedia','taller multimedia','seminario taller multimedia','fundamentos de ingenieria multimedia','introduccion a la ingenieria multimedia','laboratorio de multimedia','diseno multimedia','diseno de medios digitales','estructuracion de contenido','multimedia para moviles','tecnologias didacticas multimediables','diseno final de ingenieria multimedia'))return result('MM-BOK07','Experiencias, integración e interactividad');
+ if(has(s,'ingenieria de software','ingenieria del software','desarrollo web','diseno y desarrollo web','diseno web','desarrollo movil','aplicaciones moviles','programacion web','ingenieria web','desarrollo software','arquitectura de sistemas','requerimientos','plataformas de desarrollo multimedia','desarrollo de multimedia','programacion en ambientes moviles','validacion y verificacion','metodologias agiles','programacion orientada para objetos multimedia'))return result('MM-BOK02',has(s,'arquitectura','requerimientos','validacion','agiles','ingenieria de software','ingenieria del software')?'Ingeniería y arquitectura de software':'Desarrollo web y móvil');
+ if(has(s,'gestion','proyecto','proyectos','emprend','innovacion','administracion','economia','finanzas','marketing','idea de negocio','modelo de negocio','liderazgo','practica profesional','practicas industriales','alternativa de grado','opcion de grado','trabajo de grado','anteproyecto','profundizacion de proyectos'))return result('MM-BOK14',has(s,'emprend','innovacion','negocio','marketing','liderazgo')?'Innovación, producto y emprendimiento':'Gestión de proyectos y práctica profesional');
+ if(has(s,'etica','bioetica','humanistica','humanistico','humanidades','ciudadania','constitucion','sostenib','paz','identidad','desarrollo personal','formacion humana','bienestar','catedra','legislacion','integridad','sociedad y estado','sociedad y cultura','comunicacion oral','procesos comunicativos','lectura e interpretacion','competencias comunicativas','competencia linguistica','principios constitucionales','filosofia','formacion ciudadana','desarrollo social'))return result('MM-BOK15',has(s,'etica','bioetica','legislacion','integridad')?'Ética y ejercicio profesional':'Formación sociohumanística y comunicación');
+ if(has(s,'calculo','algebra','matemat','estadistica','probabilidad','ecuaciones diferenciales','metodos numericos','geometria vectorial','logica matematica','logica de la programacion','algorit','programacion','estructura de datos','estructuras de datos','lenguajes de programacion','precalculo','pensamiento logico'))return result('MM-BOK01',has(s,'programacion','algorit','estructura','lenguajes')?'Algoritmos, programación y estructuras':'Matemáticas y estadística');
+ if(has(s,'ingles','english','elementary','pre-intermediate','pre-elementary','deporte','quimica','fisica','mecanica','electromagnetismo','fisica electrica','fisica 1','fisica 2','extension cultural','actividad complementaria','electiva','optativa','profesional complementaria','formacion integral','metodologia de la investigacion','metodos de investigacion','fundamentos de investigacion','investigacion cuantitativa','investigacion cualitativa','seminario de investigacion','formacion investigacion','teoria y metodo en investigacion','investigacion','analisis experimental','metodologia del estudio','introduccion a la ingenieria','introduccion al programa','competencias blandas','realidad organizacional','herramientas digitales'))return result('X-COMP','Formación complementaria / general');
+ if(has(s,'diseno','diseño'))return result('MM-BOK16','Diseño y comunicación visual');
+ return result('X-COMP','Formación complementaria / general');
+}
+const RECORDS=[];PROGRAMS.forEach(p=>p.courses.filter(c=>c.cr>0).forEach(c=>{const cl=classify(c.name);RECORDS.push({...c,...cl,snies:p.snies,program:p.label,inst:p.inst,mode:p.mode,quality:p.quality,source:p.source})}));
+const els={inst:document.getElementById('fInstitution'),program:document.getElementById('fProgram'),mode:document.getElementById('fMode'),quality:document.getElementById('fQuality'),area:document.getElementById('fArea'),smin:document.getElementById('fSemMin'),smax:document.getElementById('fSemMax'),metric:document.getElementById('fMetric'),comp:document.getElementById('fComplement')};
+function option(sel,v,t){const o=document.createElement('option');o.value=v;o.textContent=t;sel.appendChild(o)}
+[...new Set(PROGRAMS.map(p=>p.inst))].sort().forEach(x=>option(els.inst,x,x));AREAS.filter(a=>a.code!=='X-COMP').forEach(a=>option(els.area,a.code,a.code.replace('MM-BOK','')+' · '+a.name));for(let i=1;i<=10;i++){option(els.smin,i,i);option(els.smax,i,i)}els.smin.value='1';els.smax.value='10';
+function rebuildPrograms(){const keep=els.program.value;els.program.innerHTML='<option value="ALL">Todos</option>';PROGRAMS.filter(p=>els.inst.value==='ALL'||p.inst===els.inst.value).forEach(p=>option(els.program,p.snies,p.label));if([...els.program.options].some(o=>o.value===keep))els.program.value=keep}
+rebuildPrograms();
+function filtered(){let r=RECORDS.filter(x=>(els.inst.value==='ALL'||x.inst===els.inst.value)&&(els.program.value==='ALL'||x.snies===els.program.value)&&(els.mode.value==='ALL'||x.mode===els.mode.value)&&(els.quality.value==='ALL'||x.quality===els.quality.value)&&x.sem>=+els.smin.value&&x.sem<=+els.smax.value&&(els.comp.checked||x.code!=='X-COMP')&&(els.area.value==='ALL'||x.code===els.area.value));return r}
+function val(r){return els.metric.value==='credits'?r.cr:1}function sum(a){return a.reduce((s,x)=>s+x,0)}
+function fmt(n){return new Intl.NumberFormat('es-CO',{maximumFractionDigits:1}).format(n)}
+function areaList(){return AREAS.filter(a=>(els.comp.checked||a.code!=='X-COMP')&&(els.area.value==='ALL'||a.code===els.area.value))}
+function selectedPrograms(r){const ids=[...new Set(r.map(x=>x.snies))];return PROGRAMS.filter(p=>ids.includes(p.snies))}
+function groupValue(r,keyfn){const m=new Map();r.forEach(x=>{const k=keyfn(x);m.set(k,(m.get(k)||0)+val(x))});return m}
+function vectorFor(snies,r,areas){const rr=r.filter(x=>x.snies===snies),m=groupValue(rr,x=>x.code);return areas.map(a=>m.get(a.code)||0)}
+function pctVector(v){const t=sum(v);return v.map(x=>t?100*x/t:0)}
+function cosine(a,b){let dot=0,aa=0,bb=0;for(let i=0;i<a.length;i++){dot+=a[i]*b[i];aa+=a[i]*a[i];bb+=b[i]*b[i]}if(!aa&&!bb)return 1;if(!aa||!bb)return 0;return dot/Math.sqrt(aa*bb)}
+const config={responsive:true,displaylogo:false,modeBarButtonsToRemove:['lasso2d','select2d']};
+function baseLayout(){return{margin:{l:70,r:30,t:30,b:65},font:{family:'Inter,Segoe UI,Arial',size:10,color:'#486581'},paper_bgcolor:'#fff',plot_bgcolor:'#fff',hoverlabel:{font:{size:11}}}}
+function updateKPIs(r){const ps=selectedPrograms(r),areas=AREAS.filter(a=>a.code!=='X-COMP'),m=groupValue(r.filter(x=>x.code!=='X-COMP'),x=>x.code),dom=[...m.entries()].sort((a,b)=>b[1]-a[1])[0];document.getElementById('kPrograms').textContent=ps.length;document.getElementById('kCredits').textContent=fmt(sum(r.filter(x=>x.code!=='X-COMP').map(x=>x.cr)));document.getElementById('kCourses').textContent=r.length;document.getElementById('kCoverage').textContent=[...m.keys()].length+'/20';document.getElementById('kDominant').textContent=dom?A[dom[0]].short:'–';document.getElementById('kDominantSub').textContent=dom?fmt(dom[1])+(els.metric.value==='credits'?' créditos':' asignaturas'):'Sin datos'}
+function activeText(){const parts=[];if(els.inst.value!=='ALL')parts.push('Institución: '+els.inst.options[els.inst.selectedIndex].text);if(els.program.value!=='ALL')parts.push('Programa: '+els.program.options[els.program.selectedIndex].text);if(els.mode.value!=='ALL')parts.push('Modalidad: '+els.mode.value);if(els.quality.value!=='ALL')parts.push('Fuente: '+els.quality.value);if(els.area.value!=='ALL')parts.push('Área: '+A[els.area.value].short);if(els.smin.value!=='1'||els.smax.value!=='10')parts.push('Periodos: '+els.smin.value+'–'+els.smax.value);document.getElementById('activeFilters').innerHTML='<strong>Filtros activos:</strong> '+(parts.length?parts.join(' · '):'ninguno')}
+function drawHeatmapProgramArea(r){const ps=selectedPrograms(r),areas=areaList(),z=ps.map(p=>pctVector(vectorFor(p.snies,r,areas)));const hover=z.map((row,i)=>row.map((v,j)=>ps[i].label+'<br>'+areas[j].code+' · '+areas[j].name+'<br>'+v.toFixed(1)+' %'));Plotly.react('heatmapProgramArea',[{type:'heatmap',x:areas.map(a=>a.code.replace('MM-BOK','')),y:ps.map(p=>p.label),z,customdata:hover,hovertemplate:'%{customdata}<extra></extra>',colorscale:[[0,'#f7fbff'],[.25,'#d7e9f7'],[.55,'#75b3db'],[1,'#0f4c75']],zmin:0,zmax:Math.max(1,...z.flat()),colorbar:{title:'%'}}],{...baseLayout(),margin:{l:185,r:40,t:20,b:55},xaxis:{title:'Knowledge Area',tickangle:0},yaxis:{automargin:true,autorange:'reversed'}},config).then(()=>{const d=document.getElementById('heatmapProgramArea');d.removeAllListeners?.('plotly_click');d.on('plotly_click',ev=>{const pt=ev.points[0],p=ps[pt.pointNumber[0]],a=areas[pt.pointNumber[1]];els.inst.value='ALL';rebuildPrograms();els.program.value=p.snies;els.area.value=a.code;render()})})}
+function drawStacked(r){const ps=selectedPrograms(r),areas=areaList();const data=areas.map((a,j)=>({type:'bar',orientation:'h',name:a.code.replace('MM-BOK',''),customdata:ps.map(p=>[a.name,p.label]),y:ps.map(p=>p.label),x:ps.map(p=>pctVector(vectorFor(p.snies,r,areas))[j]),hovertemplate:'%{customdata[1]}<br>'+a.code+' · %{customdata[0]}<br>%{x:.1f}%<extra></extra>',marker:{color:PALETTE[a.idx]}}));Plotly.react('stacked100',data,{...baseLayout(),barmode:'stack',margin:{l:185,r:30,t:15,b:55},xaxis:{title:'Participación curricular (%)',range:[0,100],ticksuffix:'%'},yaxis:{autorange:'reversed'},legend:{orientation:'h',y:-.18,font:{size:9}}},config).then(()=>{const d=document.getElementById('stacked100');d.removeAllListeners?.('plotly_click');d.on('plotly_click',ev=>{const y=ev.points[0].y,p=PROGRAMS.find(x=>x.label===y);if(p){els.inst.value='ALL';rebuildPrograms();els.program.value=p.snies;render()}})})}
+function hexRGBA(hex,a){const h=hex.replace('#','');const n=parseInt(h,16);return`rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`}
+function drawSankey(r){const ps=selectedPrograms(r),areas=areaList();const pairs=new Map();r.forEach(x=>{if(!areas.some(a=>a.code===x.code))return;const k=x.program+'|||'+x.code+'|||'+x.nucleus;pairs.set(k,(pairs.get(k)||0)+val(x))});const usedAreaCodes=[...new Set([...pairs.keys()].map(k=>k.split('|||')[1]))];const nuclei=[...new Set([...pairs.keys()].map(k=>{const p=k.split('|||');return p[1]+'|||'+p[2]}))];const nodes=[...ps.map(p=>({id:'P:'+p.label,label:p.label,color:'#cbd5e1'})),...usedAreaCodes.map(c=>({id:'A:'+c,label:c.replace('MM-BOK','')+' · '+A[c].short,color:PALETTE[A[c].idx]})),...nuclei.map(n=>{const [c,nu]=n.split('|||');return{id:'N:'+n,label:nu,color:hexRGBA(PALETTE[A[c].idx],.55)}})];const idx=Object.fromEntries(nodes.map((n,i)=>[n.id,i]));const l1=new Map(),l2=new Map();pairs.forEach((v,k)=>{const[p,c,nu]=k.split('|||');l1.set('P:'+p+'|||A:'+c,(l1.get('P:'+p+'|||A:'+c)||0)+v);l2.set('A:'+c+'|||N:'+c+'|||'+nu,(l2.get('A:'+c+'|||N:'+c+'|||'+nu)||0)+v)});const source=[],target=[],value=[],color=[];l1.forEach((v,k)=>{const [s,t]=k.split('|||A:');const aid='A:'+t;source.push(idx[s]);target.push(idx[aid]);value.push(v);color.push('rgba(100,116,139,.18)')});l2.forEach((v,k)=>{const pos=k.indexOf('|||N:');const s=k.slice(0,pos),t=k.slice(pos+3);source.push(idx[s]);target.push(idx[t]);value.push(v);const c=s.replace('A:','');color.push(hexRGBA(PALETTE[A[c].idx],.28))});Plotly.react('sankey',[{type:'sankey',arrangement:'snap',node:{pad:12,thickness:14,line:{color:'#fff',width:.5},label:nodes.map(n=>n.label),color:nodes.map(n=>n.color)},link:{source,target,value,color,hovertemplate:'%{value:.1f} '+(els.metric.value==='credits'?'créditos':'asignaturas')+'<extra></extra>'}}],{...baseLayout(),margin:{l:12,r:12,t:10,b:10}},config)}
+function drawSemester(r){const areas=areaList(),sems=[];for(let s=+els.smin.value;s<=+els.smax.value;s++)sems.push(s);const z=areas.map(a=>sems.map(s=>sum(r.filter(x=>x.code===a.code&&x.sem===s).map(val))));Plotly.react('heatmapSemester',[{type:'heatmap',x:sems,y:areas.map(a=>a.code.replace('MM-BOK','')),z,customdata:areas.map(a=>sems.map(()=>a.name)),hovertemplate:'KA %{y} · %{customdata}<br>Periodo %{x}<br>'+ (els.metric.value==='credits'?'Créditos':'Asignaturas')+': %{z}<extra></extra>',colorscale:[[0,'#f8fafc'],[.3,'#dceaf5'],[.65,'#74a9cf'],[1,'#0f4c75']],colorbar:{title:els.metric.value==='credits'?'Cr.':'Asig.'}}],{...baseLayout(),margin:{l:48,r:25,t:15,b:50},xaxis:{title:'Periodo'},yaxis:{title:'KA',autorange:'reversed'}},config)}
+function vectors(r){const ps=selectedPrograms(r),areas=areaList();return{ps,areas,vecs:ps.map(p=>pctVector(vectorFor(p.snies,r,areas)))}}
+function drawSimilarity(r){const{ps,vecs}=vectors(r),z=vecs.map(a=>vecs.map(b=>cosine(a,b)));Plotly.react('similarity',[{type:'heatmap',x:ps.map(p=>p.label),y:ps.map(p=>p.label),z,zmin:0,zmax:1,hovertemplate:'%{y}<br>%{x}<br>Similitud: %{z:.3f}<extra></extra>',colorscale:[[0,'#f7fbff'],[.5,'#9ecae1'],[1,'#084a77']],colorbar:{title:'Sim.'}}],{...baseLayout(),margin:{l:115,r:25,t:15,b:110},xaxis:{tickangle:-55},yaxis:{autorange:'reversed',automargin:true}},config)}
+function avgLinkDendrogram(labels,vecs){let uid=0;const base=vecs.map((v,i)=>vecs.map(w=>1-cosine(v,w)));let clusters=labels.map((lab,i)=>({id:uid++,members:[i],label:lab,left:null,right:null,height:0}));function cd(a,b){let s=0,n=0;a.members.forEach(i=>b.members.forEach(j=>{s+=base[i][j];n++}));return n?s/n:0}while(clusters.length>1){let bi=0,bj=1,bd=Infinity;for(let i=0;i<clusters.length;i++)for(let j=i+1;j<clusters.length;j++){const d=cd(clusters[i],clusters[j]);if(d<bd){bd=d;bi=i;bj=j}}const a=clusters[bi],b=clusters[bj],m={id:uid++,members:[...a.members,...b.members],left:a,right:b,height:bd,label:null};clusters=clusters.filter((_,k)=>k!==bi&&k!==bj);clusters.push(m)}return clusters[0]}
+function drawDendrogram(r){const{ps,vecs}=vectors(r);if(ps.length<2){Plotly.react('dendrogram',[],{...baseLayout(),annotations:[{text:'Se requieren al menos dos programas para construir el dendrograma.',showarrow:false,x:.5,y:.5,xref:'paper',yref:'paper'}]},config);return}const root=avgLinkDendrogram(ps.map(p=>p.label),vecs);const leaves=[];function order(n){if(!n.left){leaves.push(n);return}order(n.left);order(n.right)}order(root);const ypos=new Map(leaves.map((n,i)=>[n.id,i]));const segX=[],segY=[];function coords(n){if(!n.left)return{x:0,y:ypos.get(n.id)};const l=coords(n.left),rr=coords(n.right),x=n.height,y=(l.y+rr.y)/2;segX.push(l.x,x,null,rr.x,x,null,x,x,null);segY.push(l.y,l.y,null,rr.y,rr.y,null,l.y,rr.y,null);return{x,y}}coords(root);Plotly.react('dendrogram',[{type:'scatter',mode:'lines',x:segX,y:segY,line:{color:'#1769aa',width:2},hoverinfo:'skip'}],{...baseLayout(),margin:{l:185,r:30,t:15,b:55},xaxis:{title:'Distancia coseno (enlace promedio)',rangemode:'tozero'},yaxis:{tickmode:'array',tickvals:leaves.map((_,i)=>i),ticktext:leaves.map(n=>n.label),automargin:true}},config)}
+function drawTable(r){const b=document.getElementById('detailBody');b.innerHTML='';r.slice(0,500).forEach(x=>{const tr=document.createElement('tr');[x.program,x.snies,x.sem,x.name,x.cr,x.code,x.area,x.nucleus,x.source].forEach((v,i)=>{const td=document.createElement('td');if(i===5){const sp=document.createElement('span');sp.className='badge';sp.textContent=v;td.appendChild(sp)}else td.textContent=v;tr.appendChild(td)});b.appendChild(tr)})}
+function render(){if(+els.smin.value>+els.smax.value){const t=els.smin.value;els.smin.value=els.smax.value;els.smax.value=t}const r=filtered();updateKPIs(r);activeText();drawHeatmapProgramArea(r);drawStacked(r);drawSankey(r);drawSemester(r);drawSimilarity(r);drawDendrogram(r);drawTable(r)}
+els.inst.addEventListener('change',()=>{els.program.value='ALL';rebuildPrograms();render()});[els.program,els.mode,els.quality,els.area,els.smin,els.smax,els.metric,els.comp].forEach(e=>e.addEventListener('change',render));document.getElementById('resetBtn').addEventListener('click',()=>{els.inst.value='ALL';rebuildPrograms();els.program.value='ALL';els.mode.value='ALL';els.quality.value='ALL';els.area.value='ALL';els.smin.value='1';els.smax.value='10';els.metric.value='credits';els.comp.checked=false;render()});document.getElementById('csvBtn').addEventListener('click',()=>{const r=filtered(),head=['Institucion','Programa','SNIES','Modalidad','Calidad','Periodo','Asignatura','Creditos','Codigo_KA','Area_MM_BOK','Nucleo','Fuente'];const rows=[head,...r.map(x=>[x.inst,x.program,x.snies,x.mode,x.quality,x.sem,x.name,x.cr,x.code,x.area,x.nucleus,x.source])];const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const blob=new Blob(['\ufeff'+rows.map(row=>row.map(esc).join(';')).join('\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MM-BOK_benchmark_filtrado.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});render();
+</script>
+</body>
+</html>
